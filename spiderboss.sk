@@ -1,86 +1,107 @@
+# made by AmazingPika
+
+on load:
+    if directory "/plugins/MythicMobs/" does not exist:
+        send "ERROR You do not have mythicmobs installed." to console
+        send "&&x&f&b&0&0&0&0&lERROR" to all players with the permission sk.errors
+        send "" to all players with the permission sk.errors
+        send "&7&l| &x&f&b&0&0&0&0Spiderboss.sk (AdvancedBergmönch summon)" to all players with the permission sk.errors
+        send "&7&l| &x&f&b&0&0&0&0Did not load correctly, do you have the dependancies installed?" to all players with the permission sk.errors
+        send "" to all players with the permission sk.errors
+        execute console command "/sk disable spiderboss.sk"
+
+
+options:
+    eye: &2Summoning Eye
+    filled: &2That Summoning Pedestol has already been filled!
+    placed: &2You placed ONE &lSummoning Eye &2in the Summoning Pedestol!
+    added: You have added %block at location {_loc}% to the
+    removed: You have removed %block at location {_loc}% from the
+    broadcast_placed: &2%event-player% just placed a &lSummoning Eye&2! %{seyes}%/9 placed!
+    dust: draw 20 of dust using dustOption(red, 10) at location above {_i}
+    bspeak1: &2Bergmönch's web seems empty...
+    bspeak2: &2Oh you look filling, %{_cacoon}%!
+    bspeak3: &2Yes! %{_cacoon}% You are my dinner!
+
 on right click:
     if event-block is end portal frame:
-        if name of event-player's tool is "&2Summoning Eye":
+        if name of event-player's tool is "{@eye}":
             if event-block is end portal frame[eye=true]:
-                send formatted "&2That Summoning Pedestol has already been filled!" to event-player
+                cancel event
+                send "{@filled}" to event-player
             else if event-block is end portal frame[eye=false]:
                 remove 1 of tool from tool
                 cancel event
-                set block at location of event-block to end portal frame[eye=true]
-                play sound "block.end_portal_frame.fill" at volume 1 for event-player
-                send "&2You placed One &lSummoning Eye&2 in the Summoning Pedestol!" to event-player
+                set block at location of event-block to end portal frame[eye=true]:
+                play sound "block.end_portal_fram.fill" at volume 1 for event-player
+                send "{@placed}" to event-player
+
 on left click:
     if player is op:
         if player's tool is netherite sword named "Spiderreset":
             add event-block to {spiderresetblocks::*}
             set {_loc} to location of target block
-            send "You have added %block at location {_loc}% to the reset block list."
+            send "{@added} reset block list."
+        else if player's tool is netherite sword named "cacoon":
+            add event-block to {cacoon::*}
+            set {_loc} to location of target block
+            send "{@added} Cacoon block list."
+        else if player's tool is netherite sword named "cacoon2":
+        add event-block to {cacoon1:*}
+        set {_loc} to location of target block
+        send "{@added} Cacoon1 block list."
+
 on right click:
     if player is op:
         if player's tool is netherite sword named "Spiderreset":
             remove event-block from {spiderresetblocks::*}
             set {_loc} to location of target block
-            send "You have removed %block at location of {_loc}% from the reset block list."
-on left click:
-    if player is op:
-        if player's tool is netherite sword named "cacoon":
-            add event-block to {cacoon::*}
-            set {_loc} to location of target block
-            send "You have added %block at location of {_loc}% to the Cacoon block."
-on right click:
-    if player is op:
-        if player's tool is netherite sword named "cacoon":
+            send "{@removed} reset block list."
+        else if player's tool is netherite sword named "cacoon":
             remove event-block from {cacoon::*}
             set {_loc} to location of target block
-            send "You have removed %block at location of {_loc}% from the Cacoon block list."
-on left click:
-    if player is op:
-        if player's tool is netherite sword named "cacoon2":
-            add event-block to {cacoon1::*}
-            set {_loc} to location of target blocks
-            send "You have added %block at location of {_loc}% to the Cacoon1 block list."
-on right click:
-    if player is op:
-        if player's tool is netherite sword named "cacoon2":
+            send "{@removed} Cacoon block list."
+        else if player's tool isi netherite sword named "cacoon2":
             remove event-block from {cacoon1::*}
             set {_loc} to location of target block
-            send "You have removed %block at location {_loc}% from the Cacoon1 block list"
+            send "{@removed} Cacoon1 block list."
+
 on right click:
     if event-block is end portal frame:
-        if name of event-player's tool is "&2Summoning Eye":
-            if event-block is end portal frame[eye=true]:
+        if name of event-player's tool is "{@eye}":
+            if event-block is end portal fram[eye=true]:
                 add 1 to {seyes}
                 add event-player to {placedspiders::*}
                 cancel event
             if {seyes} > 9.1:
                 set {seyes} to 1
-            broadcast "&2%event-player% just placed a &lSummoning Eye&2! %{seyes}%/9 placed!"
+            broadcast "{@broadcast_placed}"
             if {seyes} = 9:
                 loop {spiderresetblocks::*}:
                     set {_i} to location of loop-value
                     set block at {_i} to end portal frame[eye=false]
                     strike lightning at {_i}
-                    draw 20 of dust using dustOption(red, 10) at location above {_i}
-                set {_cacoon} to random element out of {placedspiders::*}
+                    {@dust}
+                set {_cacoon} to a random element out of {placedspiders::*}
                 set {cacooned::%{_cacoon}%} to {_cacoon}
                 loop {spiderresetblocks::*}:
                     set {_i} to location of loop-value
-                    draw 20 of dust using dustOption(red, 10) at location above {_i}
+                    {@dust}
                 wait 2 seconds
-                broadcast "&2Bergmönch's web seems empty..."
+                broadcast "{@bpseak1}"
                 loop {spiderresetblocks::*}:
                     set {_i} to location of loop-value
-                    draw 20 of dust using dustOption(red, 10) at location above {_i}
+                    {@dust}
                 wait 2 seconds
-                broadcast "&2 Oh you look filling, %{_cacoon}%!"
+                broadcast "{@bspeak2}"
                 loop {spiderresetblocks::*}:
                     set {_i} to location of loop-value
-                    draw 20 of dust using dustOption(red, 10) at location above {_i}
+                    {@dust}
                 wait 2 seconds
-                broadcast "&2Yes! %{_cacoon}% You are my dinner!"
+                broadcast "{@bspeak3}"
                 loop {spiderresetblocks::*}:
-                    set {_i} to location of loop-value
-                    draw 20 of dust using dustOption(red, 10) at location above {_i}
+                    set {_I} to location of loop-value
+                    {@dust}
                 loop {cacoon::*}:
                     set {_sc} to location of loop-value
                     teleport {cacooned::%player%} to {_sc}
@@ -89,20 +110,29 @@ on right click:
                     set {_c1} to location of loop-value
                     set block at {_c1} to air
                     wait 1 seconds
-                make {cacooned::%player%} run command "mm m spawn Bergmönch" as op
+                make {cacoon::%player%} run command "mm m spawn Bergmönch" as op
                 wait 1 seconds
-                loop {cacoon1::*}:
+                loop {cacoon1::*}
                     set {_c1} to location of loop-value
                     set block at {_c1} to white stained glass
                 clear {placedspiders::*}
+
 command /clearlistspider [<text>]:
     permission: op
     trigger:
         if arg is not set:
             send "You must provide a list."
-        if arg is "cacoon":
+            send ""
+            send "Cacoon"
+            send "Cacoon1"
+            send "spiderresetblocks"
+            send ""
+        if arg is "Cacoon":
             clear {cacoon::*}
-            send "You have cleared the Sacrifice tp blocks"
-        if arg is "spiderreset":
+            send "You have cleared the Sacrifie tp blocks (Caccon)"
+        if arg is "Cacoon1":
+            clear {cacoon1::*}
+            send "You have cleared Caccon1"
+        if arg is "spiderresetblocks":
             clear {spiderresetblocks::*}
-            send "You have cleared the reset blocks"
+            send "You have cleared the reset blocks (End portal frames)"
