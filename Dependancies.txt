@@ -1,0 +1,5 @@
+- skript-placeholders v1.5.2 (https://github.com/APickledWalrus)
+- Skellett v2.0.9 (https://forums. skunity.com/resources/skellett)
+- skript-yaml v1.4.1 skUtilities v0.9.2 (https://tim740.github.io/)
+- skript-reflect v2.3 (https://github.com/TPGamesNL/skript-reflect)
+- SkBee v2.18.0 (https://github.com/ShaneBeee/SkBee)
