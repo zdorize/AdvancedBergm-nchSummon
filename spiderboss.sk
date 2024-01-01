@@ -1,4 +1,4 @@
-# made by AmazingPika
+# made by Dorize
 
 on load:
     if directory "/plugins/MythicMobs/" does not exist:
